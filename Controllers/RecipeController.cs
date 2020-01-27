@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -7,15 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 public class RecipesController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<string> Get()
+    public async Task<ActionResult<string>> Get()
     {
-        return "Hello";
+        var recipes = await DatabaseConnection.Connection("SELECT * FROM recipes");
+
+        return recipes;
     }
 
     [HttpGet("{id}")]
-    public ActionResult<string> Get(int id)
+    public async Task<ActionResult<string>> Get(int id)
     {
-        DatabaseConnection.Connection();
-        return id.ToString();
+        var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
+
+        return recipe;
     }
 }
