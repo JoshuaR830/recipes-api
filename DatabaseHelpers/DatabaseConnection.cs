@@ -30,6 +30,8 @@ public class DatabaseConnection
                 recipes.RecipeList.Add(new Recipe {
                     Id = reader["id"].ToString(),
                     Name = reader["name"].ToString(),
+                    Description = reader["description"].ToString(),
+                    ImageUrl = reader["imageurl"].ToString()
                 });
 				Console.WriteLine(reader["id"]);
 				Console.WriteLine(reader["name"]);
@@ -60,6 +62,9 @@ public class Recipe
 {
     public string Id { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
+
+    public string ImageUrl { get; set; }
     public List<Ingredient> Ingredients { get; set; }
     public List<Step> Method { get; set; }
 }
