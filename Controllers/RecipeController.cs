@@ -1,10 +1,11 @@
 
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 
 [Route("api/[controller]")]
 [ApiController]
-
+//[EnableCors(origins: "*", headers: "*", methods: "*")]
 public class RecipesController : ControllerBase
 {
     [HttpGet]
