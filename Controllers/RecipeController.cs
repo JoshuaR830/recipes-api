@@ -40,7 +40,7 @@ public class RecipesController : ControllerBase
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
 
-        return recipe;
+		return recipe;
     }
 }
 

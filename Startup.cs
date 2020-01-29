@@ -32,7 +32,10 @@ namespace recipe_api
 				options.AddPolicy(MyAllowSpecificOrigins,
 					builder =>
 					{
-						builder.AllowAnyOrigin();
+						builder.AllowAnyOrigin()
+							.AllowAnyHeader()
+							.AllowAnyMethod()
+							.AllowCredentials();
 					});
 			});
 

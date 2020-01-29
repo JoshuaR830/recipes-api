@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 public class DatabaseConnection 
 {
+	public static string connectionString = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4}", "82.7.67.210", "5432", "postgres", "recipefordisaster", "recipes");
+
     public async static Task<string> Connection(string query) 
     {
         //var serverName = Environment.GetEnvironmentVariable("SERVER");
@@ -15,8 +17,6 @@ public class DatabaseConnection
         //var database = Environment.GetEnvironmentVariable("DATABASE");
 
 		
-
-		var connectionString = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4}", "82.7.67.210", "5432", "postgres", "recipefordisaster", "recipes");
         var conn = new NpgsqlConnection(connectionString);
         await conn.OpenAsync();
 
@@ -44,6 +44,17 @@ public class DatabaseConnection
         System.Console.WriteLine(json);     
         return json;
     }
+
+	public async static Task WriteData(string query)
+	{
+		var conn = new NpgsqlConnection(connectionString);
+		await conn.OpenAsync();
+
+		using (var cmd = new NpgsqlCommand(query, conn))
+			cmd.ExecuteNonQuery();
+
+		conn.Close();
+	}
 }
 
 public class Step 
