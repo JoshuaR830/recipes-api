@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace recipe_api.Controllers
 {
@@ -14,7 +15,11 @@ namespace recipe_api.Controllers
 		public async Task Post([FromBody] Create create)
 		{
 			Console.WriteLine("Value >>> " + create);
-			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
+
+			var ingredients = JsonConvert.SerializeObject(create.Ingredients);
+			var methodSteps = JsonConvert.SerializeObject(create.MethodSteps);
+
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{ingredients}', '{methodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
