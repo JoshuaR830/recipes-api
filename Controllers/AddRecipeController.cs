@@ -14,7 +14,7 @@ namespace recipe_api.Controllers
 		public async Task Post([FromBody] Create create)
 		{
 			Console.WriteLine("Value >>> " + create);
-			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodsSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
