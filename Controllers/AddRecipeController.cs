@@ -16,13 +16,10 @@ namespace recipe_api.Controllers
 		{
 			Console.WriteLine("Value >>> " + create);
 
-			//var ingredients = JsonConvert.SerializeObject(create.Ingredients);
-			//var methodSteps = JsonConvert.SerializeObject(create.MethodSteps);
+			var methodSteps = ListToObject(create.MethodSteps);
+			var ingredients = ListToObject(create.Ingredients);
 
-			Console.WriteLine(create.Ingredients);
-			Console.WriteLine(create.MethodSteps);
-
-			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{ingredients}', '{methodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
@@ -33,6 +30,24 @@ namespace recipe_api.Controllers
 			var query = $"INSERT INTO recipes (id, name, description, imageurl) VALUES ('12345', 'newerer recipe', 'An even newer recipe than the newer one', 'http://flatfish.online:38120/images/AtUllswater.png')";
 			await DatabaseConnection.WriteData(query);
 		}
+
+		private string ListToObject(List<string> data)
+		{
+			var myObject = "";
+			for (var i = 0; i < data.Count; i++)
+			{
+				if (i == 0)
+					myObject += "{ " + i + ",";
+				else if (i < data.Count)
+					myObject += i + ",";
+				else
+					myObject += i + " }";
+			}
+
+			Console.WriteLine(myObject);
+
+			return myObject;
+		}
 	}
 
 	public class Create
@@ -40,7 +55,7 @@ namespace recipe_api.Controllers
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string ImageUrl { get; set; }
-		public string MethodSteps { get; set; }
-		public string Ingredients { get; set; }
+		public List<string> MethodSteps { get; set; }
+		public List<string> Ingredients { get; set; }
 	}
 }
