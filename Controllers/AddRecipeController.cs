@@ -19,7 +19,10 @@ namespace recipe_api.Controllers
 			var ingredients = JsonConvert.SerializeObject(create.Ingredients);
 			var methodSteps = JsonConvert.SerializeObject(create.MethodSteps);
 
-			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', ARRAY {ingredients}, ARRAY {methodSteps})";
+			Console.WriteLine(ingredients);
+			Console.WriteLine(methodSteps);
+
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', ARRAY '{ingredients}', ARRAY '{methodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
