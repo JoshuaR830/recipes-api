@@ -37,11 +37,11 @@ namespace recipe_api.Controllers
 			for (var i = 0; i < data.Count; i++)
 			{
 				if (i == 0)
-					myObject += @"{'" + data[i] + $"',";
+					myObject += "{\"" + data[i] + "\",";
 				else if (i < data.Count - 1)
-					myObject += @"'" + data[i] + $"',";
+					myObject += "\"" + data[i] + "\",";
 				else
-					myObject += $"'" + data[i] + @"'}";
+					myObject += "\"" + data[i] + "\"}";
 			}
 
 			Console.WriteLine(myObject);
