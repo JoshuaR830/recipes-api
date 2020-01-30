@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace recipe_api.Controllers
 {
@@ -15,13 +16,13 @@ namespace recipe_api.Controllers
 		{
 			Console.WriteLine("Value >>> " + create);
 
-			var ingredients = JsonConvert.SerializeObject(create.Ingredients);
-			var methodSteps = JsonConvert.SerializeObject(create.MethodSteps);
+			//var ingredients = JsonConvert.SerializeObject(create.Ingredients);
+			//var methodSteps = JsonConvert.SerializeObject(create.MethodSteps);
 
-			Console.WriteLine(ingredients);
-			Console.WriteLine(methodSteps);
+			Console.WriteLine(create.Ingredients);
+			Console.WriteLine(create.MethodSteps);
 
-			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{ingredients}', '{methodSteps}')";
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
@@ -39,7 +40,7 @@ namespace recipe_api.Controllers
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string ImageUrl { get; set; }
-		public JObject MethodSteps { get; set; }
-		public JObject Ingredients { get; set; }
+		public string MethodSteps { get; set; }
+		public string Ingredients { get; set; }
 	}
 }
