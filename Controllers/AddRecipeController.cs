@@ -38,7 +38,7 @@ namespace recipe_api.Controllers
 			{
 				if (i == 0)
 					myObject += "{ " + i + ",";
-				else if (i < data.Count)
+				else if (i < data.Count - 1)
 					myObject += i + ",";
 				else
 					myObject += i + " }";
