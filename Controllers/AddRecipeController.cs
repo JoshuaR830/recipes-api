@@ -14,7 +14,7 @@ namespace recipe_api.Controllers
 		public async Task Post([FromBody] Create create)
 		{
 			Console.WriteLine("Value >>> " + create);
-			var query = $"INSERT INTO recipes (id, name, description, imageurl) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}')";
+			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodsSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{create.Ingredients}', '{create.MethodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
 
@@ -29,8 +29,10 @@ namespace recipe_api.Controllers
 
 	public class Create
 	{
-		public string Name{ get; set; }
+		public string Name { get; set; }
 		public string Description { get; set; }
 		public string ImageUrl { get; set; }
+		public List<string> MethodSteps { get; set; }
+		public List<string> Ingredients { get; set; }
 	}
 }
