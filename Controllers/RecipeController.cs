@@ -36,7 +36,7 @@ public class RecipesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<string>> Get(int id)
+    public async Task<ActionResult<string>> Get(string id)
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
 
