@@ -19,6 +19,10 @@ namespace recipe_api.Controllers
 			var methodSteps = string.Join(", ", create.MethodSteps);
 			var ingredients = string.Join(", ", create.Ingredients);
 
+			Console.WriteLine("The lists as strings");
+			Console.WriteLine(methodSteps);
+			Console.WriteLine(ingredients);
+
 			var query = $"INSERT INTO recipes (id, name, description, imageurl, ingredients, methodSteps) VALUES ('{Guid.NewGuid()}', '{create.Name}', '{create.Description}', '{create.ImageUrl}', '{ingredients}', '{methodSteps}')";
 			await DatabaseConnection.WriteData(query);
 		}
