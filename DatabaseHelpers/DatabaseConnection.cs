@@ -31,7 +31,9 @@ public class DatabaseConnection
                     Id = reader["id"].ToString(),
                     Name = reader["name"].ToString(),
                     Description = reader["description"].ToString(),
-                    ImageUrl = reader["imageurl"].ToString()
+                    ImageUrl = reader["imageurl"].ToString(),
+					Ingredients = reader["ingredients"].ToString(),
+					MethodSteps = reader["methodSteps"].ToString()
                 });
 				Console.WriteLine(reader["id"]);
 				Console.WriteLine(reader["name"]);
@@ -55,18 +57,6 @@ public class DatabaseConnection
 
 		conn.Close();
 	}
-}
-
-public class Step 
-{
-    public string Id { get; set; }
-    public string Description { get; set; }
-}
-
-public class Ingredient 
-{
-    public string Id { get; set; }
-    public string Name { get; set; }
 }
 
 public class Recipe 
