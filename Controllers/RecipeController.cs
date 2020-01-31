@@ -15,6 +15,8 @@ public class RecipesController : ControllerBase
     {
         var recipes = await DatabaseConnection.Connection("SELECT * FROM recipes");
 
+		System.Console.WriteLine(recipes);
+
 		var myRecipes = JsonConvert.DeserializeObject<Recipes>(recipes);
 
 		var recipeIds = new List<RecipeTile>();
