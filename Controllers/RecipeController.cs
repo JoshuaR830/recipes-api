@@ -50,8 +50,8 @@ public class RecipesController : ControllerBase
 			Name = myRecipe.Name,
 			Description = myRecipe.Description,
 			ImageUrl = myRecipe.ImageUrl,
-			Ingredients = new List<string>(myRecipe.Ingredients.Split("¬")),
-			MethodSteps = new List<string>(myRecipe.MethodSteps.Split("¬"))
+			Ingredients = new List<string>(myRecipe.Ingredients.Split("¬ ")),
+			MethodSteps = new List<string>(myRecipe.MethodSteps.Split("¬ "))
 		};
 
 		var json = JsonConvert.SerializeObject(myRecipeObject);
