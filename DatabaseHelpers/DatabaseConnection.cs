@@ -76,8 +76,8 @@ public class Recipe
     public string Description { get; set; }
 
     public string ImageUrl { get; set; }
-    public List<Ingredient> Ingredients { get; set; }
-    public List<Step> Method { get; set; }
+    public string Ingredients { get; set; }
+    public string MethodSteps { get; set; }
 }
 
 public class Recipes
