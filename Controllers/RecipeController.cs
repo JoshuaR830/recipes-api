@@ -41,8 +41,23 @@ public class RecipesController : ControllerBase
     public async Task<ActionResult<string>> Get(string id)
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
-		
-		return recipe;
+		var myRecipes = JsonConvert.DeserializeObject<Recipes>(recipe);
+		var myRecipe = myRecipes.RecipeList[0];
+
+		var myRecipeObject = new RecipeData
+		{
+			Id = myRecipe.Id,
+			Name = myRecipe.Name,
+			Description = myRecipe.Description,
+			ImageUrl = myRecipe.ImageUrl,
+			Ingredients = new List<string>(myRecipe.Ingredients.Split(", ")),
+			MethodSteps = new List<string>(myRecipe.MethodSteps.Split(", "))
+		};
+
+		var json = JsonConvert.SerializeObject(myRecipeObject);
+
+
+		return json;
 	}
 }
 
@@ -60,6 +75,6 @@ class RecipeData
 	public string Name { get; set; }
 	public string Description { get; set; }
 	public string ImageUrl { get; set; }
-	public string MethodSteps { get; set; }
-	public string Ingredients { get; set; }
+	public List<string> MethodSteps { get; set; }
+	public List<string> Ingredients { get; set; }
 }
