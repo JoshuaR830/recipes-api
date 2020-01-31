@@ -42,8 +42,11 @@ public class RecipesController : ControllerBase
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
 		System.Console.WriteLine(">>>>" + recipe);
-		return recipe;
-    }
+		var details = JsonConvert.DeserializeObject<Recipe>(recipe);
+		var json = JsonConvert.SerializeObject(details);
+		System.Console.WriteLine(json);
+		return json;
+	}
 }
 
 class RecipeTile
