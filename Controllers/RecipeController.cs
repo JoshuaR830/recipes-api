@@ -42,7 +42,7 @@ public class RecipesController : ControllerBase
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
 		System.Console.WriteLine(">>>>" + recipe);
-		var details = JsonConvert.DeserializeObject<Recipe>(recipe);
+		var details = JsonConvert.DeserializeObject<RecipeData>(recipe);
 		var json = JsonConvert.SerializeObject(details);
 		System.Console.WriteLine(json);
 		return json;
@@ -55,4 +55,14 @@ class RecipeTile
 	public string Name { get; set; }
     public string Description { get; set; }
     public string ImageUrl { get; set; }
+}
+
+class RecipeData
+{
+	public string Id { get; set; }
+	public string Name { get; set; }
+	public string Description { get; set; }
+	public string ImageUrl { get; set; }
+	public string MethodSteps { get; set; }
+	public string Ingredients { get; set; }
 }
