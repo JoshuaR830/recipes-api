@@ -16,8 +16,8 @@ namespace recipe_api.Controllers
 		{
 			Console.WriteLine("Value >>> " + create);
 
-			var methodSteps = string.Join(", ", create.MethodSteps);
-			var ingredients = string.Join(", ", create.Ingredients);
+			var methodSteps = string.Join("¬", create.MethodSteps);
+			var ingredients = string.Join("¬", create.Ingredients);
 
 			Console.WriteLine("The lists as strings");
 			Console.WriteLine(methodSteps);
