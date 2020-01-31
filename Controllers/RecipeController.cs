@@ -39,7 +39,7 @@ public class RecipesController : ControllerBase
     public async Task<ActionResult<string>> Get(string id)
     {
         var recipe = await DatabaseConnection.Connection("SELECT * FROM recipes WHERE id='" + id + "';");
-
+		System.Console.WriteLine(">>>>" + recipe);
 		return recipe;
     }
 }
