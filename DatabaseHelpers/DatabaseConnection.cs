@@ -8,6 +8,27 @@ public class DatabaseConnection
 {
 	public static string connectionString = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4}", "82.7.67.210", "5432", "postgres", "recipefordisaster", "recipes");
 
+    public async static Task<string> ShoppingListData(string query) {
+        var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+		
+        var shoppingData = new ShoppingData(); 
+
+        using (var cmd = new NpgsqlCommand(query, conn))
+		using (var reader = await cmd.ExecuteReaderAsync())
+        {
+			while (await reader.ReadAsync()) {
+                shoppingData.UserId = reader["userid"].ToString();
+                shoppingData.ShoppingItems = reader["shoppinglist"].ToString();
+            }
+        }
+
+        conn.Close();
+
+        var json = JsonConvert.SerializeObject(shoppingData);
+        return json;
+    }
+
     public async static Task<string> Connection(string query) 
     {
         //var serverName = Environment.GetEnvironmentVariable("SERVER");
@@ -73,4 +94,9 @@ public class Recipe
 public class Recipes
 {
     public List<Recipe> RecipeList { get; set; }
+}
+
+public class ShoppingData {
+    public string UserId { get; set; }
+    public string ShoppingItems { get; set; }
 }
