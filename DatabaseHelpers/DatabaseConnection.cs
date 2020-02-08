@@ -20,6 +20,7 @@ public class DatabaseConnection
 			while (await reader.ReadAsync()) {
                 shoppingData.UserId = reader["userid"].ToString();
                 shoppingData.ShoppingItems = reader["shoppinglist"].ToString();
+                shoppingData.TickedItems = reader["ticked"].ToString();
             }
         }
 
@@ -99,4 +100,6 @@ public class Recipes
 public class ShoppingData {
     public string UserId { get; set; }
     public string ShoppingItems { get; set; }
+    public string TickedItems { get; set; }
+
 }
