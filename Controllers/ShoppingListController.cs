@@ -30,7 +30,7 @@ namespace recipe_api.Controllers
 		public async Task Put(string id, [FromBody] ShoppingListData shoppingList)
 		{
 			var shoppingListItems = string.Join("::", shoppingList.ShoppingList);
-			var query = $"UPDATE shoppinglist SET shoppinglist = {shoppingListItems} WHERE userId = '{shoppingList.UserId}'";
+			var query = $"UPDATE shoppinglist SET shoppinglist = '{shoppingListItems}' WHERE userId = '{shoppingList.UserId}'";
 			await DatabaseConnection.WriteData(query);
 		}
 
