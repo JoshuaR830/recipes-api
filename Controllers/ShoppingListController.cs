@@ -17,10 +17,23 @@ namespace recipe_api.Controllers
 			var jsonData = await DatabaseConnection.ShoppingListData(query);
 
 			var shoppingList = JsonConvert.DeserializeObject<ShoppingData>(jsonData);
+
+			System.Console.WriteLine(shoppingList.TickedItems);
+			var tickList = new List<string>(shoppingList.TickedItems.Split("::"));
+			System.Console.WriteLine(tickList);
+			var ticked = new List<int>();
+			foreach(var tick in tickList) 
+			{
+				System.Console.WriteLine("Tick: " + tick);
+				if(tick.Length > 0)
+					ticked.Add(Convert.ToInt32(tick));
+			}
+
 			var shoppingListData = new ShoppingListData
 			{
 				UserId = Guid.Parse(shoppingList.UserId),
-				ShoppingList = new List<string>(shoppingList.ShoppingItems.Split("::"))
+				ShoppingList = new List<string>(shoppingList.ShoppingItems.Split("::")),
+				Ticked = ticked
 			};
 
 			return JsonConvert.SerializeObject(shoppingListData);
@@ -30,7 +43,8 @@ namespace recipe_api.Controllers
 		public async Task Put(string id, [FromBody] ShoppingListData shoppingList)
 		{
 			var shoppingListItems = string.Join("::", shoppingList.ShoppingList);
-			var query = $"UPDATE shoppinglist SET shoppinglist = '{shoppingListItems}' WHERE userId = '{shoppingList.UserId}'";
+			var ticked = string.Join("::", shoppingList.Ticked);
+			var query = $"UPDATE shoppinglist SET shoppinglist = '{shoppingListItems}', ticked = '{ticked}' WHERE userId = '{shoppingList.UserId}'";
 			await DatabaseConnection.WriteData(query);
 		}
 
@@ -46,5 +60,6 @@ namespace recipe_api.Controllers
 	{
 		public Guid UserId { get; set; }
 		public List<string> ShoppingList { get; set; }
+		public List<int> Ticked { get; set; }
 	}
 }
