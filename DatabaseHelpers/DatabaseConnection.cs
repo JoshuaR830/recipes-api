@@ -47,8 +47,40 @@ public class DatabaseConnection
         return json;
     }
 
+    public async static Task<bool> DoesUserExist(string query)
+    {
+        System.Console.WriteLine(query);
+        var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+        var cmd = new NpgsqlCommand(query, conn);
+        var count = Convert.ToInt64(cmd.ExecuteScalar());
+        conn.Close();
+        
+        return count >= 1 ? true : false;
+    }
+
+    public async static Task<UserData> Login(string query) 
+    {
+        var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+
+        var userData = new UserData();
+
+		using (var cmd = new NpgsqlCommand(query, conn))
+		using (var reader = await cmd.ExecuteReaderAsync())
+			while (await reader.ReadAsync()) {
+                userData.HashedPassword = reader["hashedpassword"].ToString();
+                userData.Salt = reader["salt"].ToString();
+            }
+
+        conn.Close();
+
+        return userData;
+    }
+
 	public async static Task WriteData(string query)
 	{
+        System.Console.WriteLine(query);
 		var conn = new NpgsqlConnection(connectionString);
 		await conn.OpenAsync();
 
@@ -73,4 +105,10 @@ public class Recipe
 public class Recipes
 {
     public List<Recipe> RecipeList { get; set; }
+}
+
+public class UserData
+{
+    public string HashedPassword { get; set; }
+    public string Salt { get; set; }
 }
