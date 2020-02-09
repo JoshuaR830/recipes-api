@@ -129,6 +129,11 @@ public class Recipes
     public List<Recipe> RecipeList { get; set; }
 }
 
+public class UserData
+{
+    public string HashedPassword { get; set; }
+    public string Salt { get; set; }
+}
 public class ShoppingData {
     public string UserId { get; set; }
     public string ShoppingItems { get; set; }
