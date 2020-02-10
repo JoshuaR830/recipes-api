@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace recipe_api.Controllers 
 {    
@@ -19,13 +20,20 @@ namespace recipe_api.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] LoginUser loginAttempt)
+        public async Task<string> Post([FromBody] LoginUser loginAttempt)
         {
+            var jsonResponse = "";
             var existenceQuery = $"SELECT COUNT(1) FROM users WHERE username = '{loginAttempt.UserName}';";
             var existence = await DatabaseConnection.DoesUserExist(existenceQuery);
 
+            var response = new LoginResponse();
+            
             if (!existence)
-                return false;
+            {
+                response.Status = false;
+                jsonResponse = JsonConvert.SerializeObject(response);
+                return jsonResponse;
+            }
 
             var query = $"SELECT hashedpassword, salt FROM users WHERE username = '{loginAttempt.UserName}';";
             var tableData = await DatabaseConnection.Login(query);
@@ -34,7 +42,19 @@ namespace recipe_api.Controllers
             var dbHashedPassword = tableData.HashedPassword;
             
             var areEqual = myHashedPassword == dbHashedPassword;
-            return areEqual;
+
+            if(areEqual)
+            {
+                // make a request to db for user data
+                response.UserId = Guid.NewGuid();
+                response.UserName = "";
+                response.ImageUrl = "";
+            }
+
+            response.Status = areEqual;
+
+            jsonResponse = JsonConvert.SerializeObject(response);
+            return jsonResponse;
         }
     } 
 
@@ -59,5 +79,13 @@ namespace recipe_api.Controllers
             Array.ForEach(hashedPassword, e => builder.Append(e.ToString("x2")));
             return builder.ToString();
         }
+    }
+
+    public class LoginResponse
+    {
+        public bool Status { get; set; }
+        public string UserName { get; set; }
+        public string ImageUrl { get; set; }
+        public Guid UserId { get; set; } 
     }
 }
