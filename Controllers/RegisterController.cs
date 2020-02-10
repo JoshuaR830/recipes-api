@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace recipe_api.Controllers 
 {    
@@ -22,7 +23,7 @@ namespace recipe_api.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] RegisterUser register)
+        public async Task<string> Post([FromBody] RegisterUser register)
         {
             var hashUser = new HashUser(register.Password);
 
@@ -31,8 +32,13 @@ namespace recipe_api.Controllers
 
             System.Console.WriteLine(existence);
 
-            if (existence)
-                return false;
+            var registeredResponse = new RegisterResponse();
+
+
+            if (existence) {
+                registeredResponse.Status = false;
+                return JsonConvert.SerializeObject(registeredResponse);
+            }
 
             var hashedPassword = hashUser.HashedPassword;
             var salt = Encoding.ASCII.GetString(hashUser.Salt);
@@ -40,7 +46,14 @@ namespace recipe_api.Controllers
             var query = $"INSERT INTO users (username, hashedpassword, salt) VALUES ('{register.UserName}', '{hashedPassword}', '{salt}');";
 			await DatabaseConnection.WriteData(query);
 
-            return true;
+            registeredResponse.Status = true;
+
+            // make a request to db for user data
+            registeredResponse.UserId = Guid.NewGuid();
+            registeredResponse.UserName = "Joshua";
+            registeredResponse.ImageUrl = "http://flatfish.online:38120/images/Facebook%20Profile.png";
+            
+            return JsonConvert.SerializeObject(registeredResponse);
         }
     } 
 
@@ -102,5 +115,13 @@ namespace recipe_api.Controllers
             System.Console.WriteLine(this.HashedPassword == myPassword);
             return myPassword.SequenceEqual(this.HashedPassword);
         }
+    }
+
+    public class RegisterResponse
+    {
+        public bool Status { get; set; }
+        public string UserName { get; set; }
+        public string ImageUrl { get; set; }
+        public Guid UserId { get; set; } 
     }
 }
