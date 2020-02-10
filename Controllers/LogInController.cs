@@ -48,7 +48,7 @@ namespace recipe_api.Controllers
                 // make a request to db for user data
                 response.UserId = Guid.NewGuid();
                 response.UserName = "Joshua";
-                response.ImageUrl = "http://flatfish.online:38120/images/IMG_20200209_214516147.jpg";
+                response.ImageUrl = "http://flatfish.online:38120/images/Facebook%20Profile.png";
             }
 
             response.Status = areEqual;
