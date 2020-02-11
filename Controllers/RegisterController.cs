@@ -44,7 +44,7 @@ namespace recipe_api.Controllers
 			await DatabaseConnection.WriteData(query);
 
             registeredResponse.Status = true;
-            var createShoppingListQuery = $"INSERT INTO shoppinglist (id) VALUES ('{userId.ToString()}')";
+            var createShoppingListQuery = $"INSERT INTO shoppinglist (userid) VALUES ('{userId.ToString()}')";
             await DatabaseConnection.WriteData(createShoppingListQuery); 
 
 
