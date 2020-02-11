@@ -93,6 +93,8 @@ public class DatabaseConnection
 			while (await reader.ReadAsync()) {
                 userData.HashedPassword = reader["hashedpassword"].ToString();
                 userData.Salt = reader["salt"].ToString();
+                userData.ProfilePicture = reader["profilepicture"].ToString();
+                userData.Id = Guid.Parse(reader["id"].ToString());
             }
 
         conn.Close();
@@ -133,6 +135,8 @@ public class UserData
 {
     public string HashedPassword { get; set; }
     public string Salt { get; set; }
+    public string ProfilePicture { get; set; }
+    public Guid Id { get; set; } 
 }
 public class ShoppingData {
     public string UserId { get; set; }

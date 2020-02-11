@@ -35,7 +35,7 @@ namespace recipe_api.Controllers
                 return jsonResponse;
             }
 
-            var query = $"SELECT hashedpassword, salt FROM users WHERE username = '{loginAttempt.UserName}';";
+            var query = $"SELECT hashedpassword, salt, id, profilepicture FROM users WHERE username = '{loginAttempt.UserName}';";
             var tableData = await DatabaseConnection.Login(query);
             
             var myHashedPassword = loginAttempt.HashMyPassword(loginAttempt.Password, tableData.Salt);
