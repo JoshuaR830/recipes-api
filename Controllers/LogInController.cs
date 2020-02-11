@@ -45,7 +45,7 @@ namespace recipe_api.Controllers
 
             if(areEqual)
             {
-                response.UserId = tableData.Id;
+                response.UserId = tableData.Id.ToString();
                 response.UserName = loginAttempt.UserName;
                 response.ImageUrl = tableData.ProfilePicture;
                 if(response.ImageUrl.Length == 0)
@@ -87,6 +87,6 @@ namespace recipe_api.Controllers
         public bool Status { get; set; }
         public string UserName { get; set; }
         public string ImageUrl { get; set; }
-        public Guid UserId { get; set; } 
+        public string UserId { get; set; } 
     }
 }
