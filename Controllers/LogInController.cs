@@ -45,10 +45,11 @@ namespace recipe_api.Controllers
 
             if(areEqual)
             {
-                // make a request to db for user data
-                response.UserId = Guid.NewGuid();
-                response.UserName = "Joshua";
-                response.ImageUrl = "http://flatfish.online:38120/images/Facebook%20Profile.png";
+                response.UserId = tableData.Id;
+                response.UserName = loginAttempt.UserName;
+                response.ImageUrl = tableData.ProfilePicture;
+                if(response.ImageUrl.Length == 0)
+                    response.ImageUrl = "http://flatfish.online:38120/images/ProfilePlaceholder.png";
             }
 
             response.Status = areEqual;

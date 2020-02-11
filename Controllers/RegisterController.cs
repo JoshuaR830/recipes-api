@@ -43,15 +43,15 @@ namespace recipe_api.Controllers
             var hashedPassword = hashUser.HashedPassword;
             var salt = Encoding.ASCII.GetString(hashUser.Salt);
 
-            var query = $"INSERT INTO users (id, username, hashedpassword, salt, profilepicture) VALUES ('{Guid.NewGuid().ToString()}', '{register.UserName}', '{hashedPassword}', '{salt}', '{register.ImageUrl}' );";
+            var userId = Guid.NewGuid().ToString();
+            var query = $"INSERT INTO users (id, username, hashedpassword, salt, profilepicture) VALUES ('{userId}', '{register.UserName}', '{hashedPassword}', '{salt}', '{register.ImageUrl}' );";
 			await DatabaseConnection.WriteData(query);
 
             registeredResponse.Status = true;
 
-            // make a request to db for user data
-            registeredResponse.UserId = Guid.NewGuid();
-            registeredResponse.UserName = "Joshua";
-            registeredResponse.ImageUrl = "http://flatfish.online:38120/images/Facebook%20Profile.png";
+            registeredResponse.UserId = Guid.Parse(userId);
+            registeredResponse.UserName = register.UserName;
+            registeredResponse.ImageUrl = register.ImageUrl;
             
             return JsonConvert.SerializeObject(registeredResponse);
         }

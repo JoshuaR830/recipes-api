@@ -136,7 +136,7 @@ public class UserData
     public string HashedPassword { get; set; }
     public string Salt { get; set; }
     public string ProfilePicture { get; set; }
-    public Guid Id { get; set; } 
+    public Guid Id { get; set; }
 }
 public class ShoppingData {
     public string UserId { get; set; }
