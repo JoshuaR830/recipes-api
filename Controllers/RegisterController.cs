@@ -15,7 +15,6 @@ namespace recipe_api.Controllers
         [HttpGet("{userName}")]
         public async Task<ActionResult<string>> Get(string userName)
         {
-
             return "Not implemented";
         }
 
@@ -45,10 +44,14 @@ namespace recipe_api.Controllers
 			await DatabaseConnection.WriteData(query);
 
             registeredResponse.Status = true;
+            var createShoppingListQuery = $"INSERT INTO shoppinglist (id) VALUES ('{userId.ToString()}')";
+            await DatabaseConnection.WriteData(createShoppingListQuery); 
+
 
             registeredResponse.UserId = Guid.Parse(userId);
             registeredResponse.UserName = register.UserName;
             registeredResponse.ImageUrl = register.ImageUrl;
+            
             
             return JsonConvert.SerializeObject(registeredResponse);
         }
