@@ -30,6 +30,27 @@ public class DatabaseConnection
         return json;
     }
 
+    internal static async Task<string> GetProfilePicture(string query)
+    {
+        var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+		
+        var profilePicture = new ProfilePicture();
+
+        using (var cmd = new NpgsqlCommand(query, conn))
+		using (var reader = await cmd.ExecuteReaderAsync())
+        {
+			while (await reader.ReadAsync()) {
+                profilePicture.ImageUrl = reader["profilepicture"].ToString();
+            }
+        }
+
+        conn.Close();
+
+        var json = JsonConvert.SerializeObject(profilePicture);
+        return json;
+    }
+
     public async static Task<string> Connection(string query) 
     {
         //var serverName = Environment.GetEnvironmentVariable("SERVER");
@@ -143,4 +164,9 @@ public class ShoppingData {
     public string ShoppingItems { get; set; }
     public string TickedItems { get; set; }
 
+}
+
+public class ProfilePicture
+{
+    public string ImageUrl { get; set; }
 }

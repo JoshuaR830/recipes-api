@@ -14,9 +14,12 @@ namespace recipe_api.Controllers
         [HttpGet("{userName}")]
         public async Task<ActionResult<string>> Get(string userName)
         {
-            var query = $"SELECT hashedpassword, salt FROM users WHERE username = '{userName}';";
-            var userData = await DatabaseConnection.Login(query);
-            return "Not implemented";
+            System.Console.WriteLine(userName);
+
+            var query = $"SELECT profilepicture FROM users WHERE username = '{userName}';";
+
+            var profilePicture = await DatabaseConnection.GetProfilePicture(query);
+            return profilePicture;
         }
 
         [HttpPost]
