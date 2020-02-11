@@ -43,7 +43,7 @@ namespace recipe_api.Controllers
             var hashedPassword = hashUser.HashedPassword;
             var salt = Encoding.ASCII.GetString(hashUser.Salt);
 
-            var query = $"INSERT INTO users (username, hashedpassword, salt) VALUES ('{register.UserName}', '{hashedPassword}', '{salt}');";
+            var query = $"INSERT INTO users (id, username, hashedpassword, salt, profilepicture) VALUES ('{Guid.NewGuid().ToString()}', '{register.UserName}', '{hashedPassword}', '{salt}', '{register.ImageUrl}' );";
 			await DatabaseConnection.WriteData(query);
 
             registeredResponse.Status = true;
@@ -61,6 +61,7 @@ namespace recipe_api.Controllers
     {
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string ImageUrl { get; set; }
     }
 
     public class HashUser
