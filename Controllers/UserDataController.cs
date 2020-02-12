@@ -9,10 +9,10 @@ namespace recipe_api.Controllers
     public class UserDataController : ControllerBase 
     {
         [HttpPost]
-        public async Task<string> Post([FromBody] string id) 
+        public async Task<string> Post([FromBody] MyUserId user) 
         {
             var jsonResponse = "";
-            var existenceQuery = $"SELECT COUNT(1) FROM users WHERE id = '{id}';";
+            var existenceQuery = $"SELECT COUNT(1) FROM users WHERE id = '{user.Id}';";
             var existence = await DatabaseConnection.DoesUserExist(existenceQuery);
 
             var response = new LoginResponse();
@@ -24,11 +24,11 @@ namespace recipe_api.Controllers
                 return jsonResponse;
             }
 
-            var query = $"SELECT, username, profilepicture FROM users WHERE id = '{id}';";
+            var query = $"SELECT username, hashedpassword, salt, id, profilepicture FROM users WHERE id = '{user.Id}';";
             var tableData = await DatabaseConnection.Login(query);
         
             response.Status = true;
-            response.UserId = id;
+            response.UserId = user.Id;
             response.UserName = tableData.UserName;
             response.ImageUrl = tableData.ProfilePicture;
             if(response.ImageUrl.Length == 0)
@@ -37,5 +37,9 @@ namespace recipe_api.Controllers
             var responseData = JsonConvert.SerializeObject(response);
             return responseData;
         }
+    }
+
+    public class MyUserId {
+        public string Id { get; set; }
     }
 }
