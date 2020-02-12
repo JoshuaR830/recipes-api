@@ -30,6 +30,8 @@ namespace recipe_api.Controllers
             var existence = await DatabaseConnection.DoesUserExist(existenceQuery);
 
             var response = new LoginResponse();
+
+            var userId = new UserId();
             
             if (!existence)
             {
@@ -55,9 +57,14 @@ namespace recipe_api.Controllers
                     response.ImageUrl = "http://flatfish.online:38120/images/ProfilePlaceholder.png";
             }
 
-            response.Status = areEqual;
+            if (areEqual)
+            {
+                userId.Id = tableData.Id.ToString();
+            }
 
-            jsonResponse = JsonConvert.SerializeObject(response);
+            userId.Status = areEqual;
+
+            jsonResponse = JsonConvert.SerializeObject(userId);
             return jsonResponse;
         }
     } 
@@ -91,5 +98,11 @@ namespace recipe_api.Controllers
         public string UserName { get; set; }
         public string ImageUrl { get; set; }
         public string UserId { get; set; } 
+    }
+
+    public class UserId
+    {
+        public string Id { get; set; }
+        public bool Status { get; set; }
     }
 }

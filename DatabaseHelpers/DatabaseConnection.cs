@@ -116,6 +116,7 @@ public class DatabaseConnection
                 userData.Salt = reader["salt"].ToString();
                 userData.ProfilePicture = reader["profilepicture"].ToString();
                 userData.Id = Guid.Parse(reader["id"].ToString());
+                userData.UserName = reader["username"].ToString();
             }
 
         conn.Close();
@@ -154,6 +155,7 @@ public class Recipes
 
 public class UserData
 {
+    public string UserName { get; set; }
     public string HashedPassword { get; set; }
     public string Salt { get; set; }
     public string ProfilePicture { get; set; }
