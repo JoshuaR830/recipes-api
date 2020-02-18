@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace recipe_api.Controllers 
 {    
@@ -45,13 +46,24 @@ namespace recipe_api.Controllers
 
             registeredResponse.Status = true;
             var createShoppingListQuery = $"INSERT INTO shoppinglist (userid) VALUES ('{userId.ToString()}')";
-            await DatabaseConnection.WriteData(createShoppingListQuery); 
+            await DatabaseConnection.WriteData(createShoppingListQuery);
 
+            var createScheduleQuery = $"INSERT INTO scheduledays (userId) VALUES ('{userId.ToString()}')";
+
+            var days = new List<string> {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+
+            foreach(var day in days)
+            {
+                var dayId = Guid.NewGuid();
+                var createDayQuery = $"INSERT INTO scheduletimes (dayId) VALUES ('{dayId}')";
+                var updateDayQuery = $"UPDATE scheduledays SET {day} = '{dayId}' WHERE userId = '{userId.ToString()}'";
+                await DatabaseConnection.WriteData(createDayQuery);
+                await DatabaseConnection.WriteData(updateDayQuery);
+            }
 
             registeredResponse.UserId = Guid.Parse(userId);
             registeredResponse.UserName = register.UserName;
             registeredResponse.ImageUrl = register.ImageUrl;
-            
             
             return JsonConvert.SerializeObject(registeredResponse);
         }

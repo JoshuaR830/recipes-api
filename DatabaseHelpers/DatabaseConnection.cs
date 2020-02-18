@@ -12,7 +12,7 @@ public class DatabaseConnection
         var conn = new NpgsqlConnection(connectionString);
         await conn.OpenAsync();
 		
-        var shoppingData = new ShoppingData(); 
+        var shoppingData = new ShoppingData();
 
         using (var cmd = new NpgsqlCommand(query, conn))
 		using (var reader = await cmd.ExecuteReaderAsync())
@@ -159,6 +159,7 @@ public class UserData
     public string ProfilePicture { get; set; }
     public Guid Id { get; set; }
 }
+
 public class ShoppingData {
     public string UserId { get; set; }
     public string ShoppingItems { get; set; }
