@@ -48,15 +48,15 @@ namespace recipe_api.Controllers
             var createShoppingListQuery = $"INSERT INTO shoppinglist (userid) VALUES ('{userId.ToString()}')";
             await DatabaseConnection.WriteData(createShoppingListQuery);
 
-            var createScheduleQuery = $"INSERT INTO scheduledays (userId) VALUES ('{userId.ToString()}')";
+            var createScheduleQuery = $"INSERT INTO scheduledays (userid) VALUES ('{userId.ToString()}')";
 
             var days = new List<string> {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
 
             foreach(var day in days)
             {
                 var dayId = Guid.NewGuid();
-                var createDayQuery = $"INSERT INTO scheduletimes (dayId) VALUES ('{dayId}')";
-                var updateDayQuery = $"UPDATE scheduledays SET {day} = '{dayId}' WHERE userId = '{userId.ToString()}'";
+                var createDayQuery = $"INSERT INTO scheduletimes (dayid) VALUES ('{dayId}')";
+                var updateDayQuery = $"UPDATE scheduledays SET {day} = '{dayId}' WHERE userid = '{userId.ToString()}'";
                 await DatabaseConnection.WriteData(createDayQuery);
                 await DatabaseConnection.WriteData(updateDayQuery);
             }
