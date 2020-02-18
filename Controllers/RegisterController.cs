@@ -49,6 +49,7 @@ namespace recipe_api.Controllers
             await DatabaseConnection.WriteData(createShoppingListQuery);
 
             var createScheduleQuery = $"INSERT INTO scheduledays (userid) VALUES ('{userId.ToString()}')";
+            await DatabaseConnection.WriteData(createScheduleQuery);
 
             var days = new List<string> {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
 
