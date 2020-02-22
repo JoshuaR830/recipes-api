@@ -30,6 +30,90 @@ public class DatabaseConnection
         return json;
     }
 
+    public async static Task<string> GetScheduledRecipes(string id)
+    {
+        var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+
+        var daysQuery = $"SELECT * FROM scheduledays WHERE userid = '{id}'";
+
+        var scheduledDays = new ScheduledDayIds();
+
+        scheduledDays.AllDays = new List<string>();
+        using (var cmd = new NpgsqlCommand(daysQuery, conn))
+        using (var reader = await cmd.ExecuteReaderAsync())
+        {
+            while (await reader.ReadAsync())
+            {
+                System.Console.WriteLine(">>>>" + reader["monday"]);
+                scheduledDays.AllDays.Add(reader["monday"].ToString());
+                scheduledDays.AllDays.Add(reader["tuesday"].ToString());
+                scheduledDays.AllDays.Add(reader["wednesday"].ToString());
+                scheduledDays.AllDays.Add(reader["thursday"].ToString());
+                scheduledDays.AllDays.Add(reader["friday"].ToString());
+                scheduledDays.AllDays.Add(reader["saturday"].ToString());
+                scheduledDays.AllDays.Add(reader["sunday"].ToString());
+            }
+        }
+
+        var scheduledTimes = new ScheduledTimeIds();
+        scheduledTimes.AllRecipes = new List<DayRecipeIds>();
+
+        foreach(var day in scheduledDays.AllDays)
+        {
+            var timesQuery = $"SELECT * FROM scheduletimes WHERE dayid = '{day}'";
+            using (var cmd = new NpgsqlCommand(timesQuery, conn))
+            using (var reader = await cmd.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    scheduledTimes.AllRecipes.Add(new DayRecipeIds {
+                        Breakfast = reader["breakfast"].ToString(),
+                        Lunch = reader["lunch"].ToString(),
+                        Dinner = reader["dinner"].ToString() 
+                    });
+                }
+            }
+        }
+
+        var scheduledTimeRecipeList = new ScheduledTimes();
+        scheduledTimeRecipeList.AllRecipes = new List<DayRecipes>();
+        
+
+        foreach(var time in scheduledTimes.AllRecipes)
+        {
+            var breakfastId = time.Breakfast;
+            var breakfastRecipeQuery = $"SELECT * FROM recipes WHERE id = '{breakfastId}'";
+            var breakfastRecipeJson = await Connection(breakfastRecipeQuery);
+
+            var lunchId = time.Lunch;
+            var lunchRecipeQuery = $"SELECT * FROM recipes WHERE id = '{lunchId}'";
+            var lunchRecipeJson = await Connection(lunchRecipeQuery);
+            
+            var dinnerId = time.Dinner;
+            var dinnerRecipeQuery = $"SELECT * FROM recipes WHERE id = '{dinnerId}'";
+            var dinnerRecipeJson = await Connection(dinnerRecipeQuery);
+
+            scheduledTimeRecipeList.AllRecipes.Add(new DayRecipes {
+                Breakfast = JsonConvert.DeserializeObject<Recipes>(breakfastRecipeJson).RecipeList[0],
+                Lunch = JsonConvert.DeserializeObject<Recipes>(lunchRecipeJson).RecipeList[0],
+                Dinner = JsonConvert.DeserializeObject<Recipes>(dinnerRecipeJson).RecipeList[0]
+            });
+        }
+
+        var scheduleDays = new ScheduledDays();
+
+        scheduleDays.Monday = scheduledTimeRecipeList.AllRecipes[0];
+        scheduleDays.Tuesday = scheduledTimeRecipeList.AllRecipes[1];
+        scheduleDays.Wednesday = scheduledTimeRecipeList.AllRecipes[2];
+        scheduleDays.Thursday = scheduledTimeRecipeList.AllRecipes[3];
+        scheduleDays.Friday = scheduledTimeRecipeList.AllRecipes[4];
+        scheduleDays.Saturday = scheduledTimeRecipeList.AllRecipes[5];
+        scheduleDays.Sunday = scheduledTimeRecipeList.AllRecipes[6];
+
+        return JsonConvert.SerializeObject(scheduleDays);
+    }
+
     internal static async Task<string> GetProfilePicture(string query)
     {
         var conn = new NpgsqlConnection(connectionString);
@@ -169,4 +253,45 @@ public class ShoppingData {
 public class ProfilePicture
 {
     public string ImageUrl { get; set; }
+}
+
+public class ScheduledDayIds
+{
+    public List<string> AllDays { get; set; }
+
+}
+
+public class ScheduledTimeIds
+{
+    public List<DayRecipeIds> AllRecipes { get; set; }
+}
+
+public class DayRecipeIds
+{
+    public string Breakfast { get; set; }
+    public string Lunch { get; set; }
+    public string Dinner { get; set; }
+}
+
+public class ScheduledTimes
+{
+       public List<DayRecipes> AllRecipes { get; set; }
+}
+
+public class DayRecipes
+{
+    public Recipe Breakfast { get; set; }
+    public Recipe Lunch { get; set; }
+    public Recipe Dinner { get; set; }
+}
+
+public class ScheduledDays
+{
+    public DayRecipes Monday { get; set; }
+    public DayRecipes Tuesday { get; set; }
+    public DayRecipes Wednesday { get; set; }
+    public DayRecipes Thursday { get; set; }
+    public DayRecipes Friday { get; set; }
+    public DayRecipes Saturday { get; set; }
+    public DayRecipes Sunday { get; set; }
 }
