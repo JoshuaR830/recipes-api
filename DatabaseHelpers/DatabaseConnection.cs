@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 public class DatabaseConnection 
 {
-	public static string connectionString = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4}", "82.7.67.210", "5432", "postgres", "recipefordisaster", "recipes");
+	public static string connectionString = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4}", "flatfish.online", "5432", "postgres", "recipefordisaster", "recipes");
 
     public async static Task<string> ShoppingListData(string query) {
         var conn = new NpgsqlConnection(connectionString);
